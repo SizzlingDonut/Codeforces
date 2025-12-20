@@ -1,45 +1,44 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 void solve(){
-    int a, b, xk, yk, xq, yq;
+    int dx[4] = {-1, 1, -1, 1}, dy[4] = {-1, -1, 1, 1};
+
+    long long a, b;
     cin >> a >> b;
-    cin >> xk >> yk;
-    cin >> xq >> yq;
+    long long x_king, y_king;
+    cin >> x_king >> y_king;
+    long long x_queen, y_queen;
+    cin >> x_queen >> y_queen;
 
-    vector<pair<int, int>>k = {{xk+a, yk+b}, {xk+a, yk-b}, {xk-a, yk+b}, {xk-a, yk-b},
-                               {xk+b, yk+a}, {xk+b, yk-a}, {xk-b, yk+a}, {xk-b, yk-a}};
+    set<pair<int, int>> king_hits, queen_hits;
 
-    vector<pair<int, int>>q = {{xq+a, yq+b}, {xq+a, yq-b}, {xq-a, yq+b}, {xq-a, yq-b},
-                               {xq+b, yq+a}, {xq+b, yq-a}, {xq-b, yq+a}, {xq-b, yq-a},};
+    for (int j = 0; j < 4; j++){
+        king_hits.insert({x_king + dx[j] * a, y_king + dy[j] * b});
+        king_hits.insert({x_king + dx[j] * b, y_king + dy[j] * a});
 
-    int mx = (xk + xq)/2;
-    int my = (yk + yq)/2;
-
-    for(int i=0; i<8; i++){
-        for(int j=0; j<8; j++){
-            if(k[i] == q[j]){
-                if((k[i].first==mx) && (k[i].second==my)){
-                    cout << "1" << endl;
-                    return;
-                }else{
-                    cout << "2" << endl;
-                    return;
-                }
-            }
-        }
+        queen_hits.insert({x_queen + dx[j] * a, y_queen + dy[j] * b});
+        queen_hits.insert({x_queen + dx[j] * b, y_queen + dy[j] * a});
     }
 
-    cout << "0" << endl;
+    int ans = 0; 
+    for (auto position : king_hits){
+        if (queen_hits.find(position) != queen_hits.end()){
+            ans++;
+        }
+    }
+    cout << ans << endl;
 }
 
-int main(){
+int main()
+{
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    
+
     int t;
     cin >> t;
-    while(t--){
+    while (t--)
+    {
         solve();
     }
     return 0;
